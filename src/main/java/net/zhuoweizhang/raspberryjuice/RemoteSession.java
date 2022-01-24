@@ -318,6 +318,19 @@ public class RemoteSession {
 				int entityId = Integer.parseInt(args[0]);
 				send(getProjectileHits(entityId));
 			
+			// player.attach
+			} else if (c.equals("player.attach")) {
+				plugin.getLogger().info("Attaching to Player [" + args[0] + "]...");
+				Player p = plugin.getNamedPlayer(args[0]);
+				if (p != null) {
+					attachedPlayer = p;
+					plugin.getLogger().info("Player [" + args[0] + "] attached.");
+					send(p.getPlayerListName());
+				} else {
+					plugin.getLogger().warning("Player [" + args[0] + "] not found.");
+					send("Fail");
+				}
+				
 			// player.getTile
 			}else if (c.equals("player.getTile")) {
 				Player currentPlayer = getCurrentPlayer();
@@ -702,9 +715,13 @@ public class RemoteSession {
 	public Player getCurrentPlayer() {
 		Player player = attachedPlayer;
 		// if the player hasnt already been retreived for this session, go and get it.
-		if (player == null) {
-			player = plugin.getHostPlayer();
-			attachedPlayer = player;
+		if (player == null) {	
+			if (plugin.getOnlinePlayerNumber() == 1) {
+				player = plugin.getHostPlayer();
+				attachedPlayer = player;
+			}
+			//It will fail if no previously attached player found when there are more than 1 
+			//online players logged in at the time.
 		}
 		return player;
 	}

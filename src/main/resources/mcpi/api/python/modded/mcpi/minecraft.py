@@ -213,6 +213,10 @@ class CmdPlayer(CmdPositioner):
     def clearEvents(self):
         """Clear the players events"""
         self.conn.send(b"player.events.clear")
+        
+    def attach(self, *args):
+        s = self.conn.sendReceive(b"player.attach", args)
+        return s;
 
 class CmdCamera:
     def __init__(self, connection):
@@ -374,7 +378,12 @@ class Minecraft:
     @staticmethod
     def create(address = "localhost", port = 4711):
         return Minecraft(Connection(address, port))
-
+        
+    @staticmethod
+    def createMP(username, address = "localhost", port = 4711):
+        mc = Minecraft(Connection(address, port))
+        mc.player.attach(username)
+        return mc
 
 if __name__ == "__main__":
     mc = Minecraft.create()

@@ -178,6 +178,10 @@ public class RaspberryJuicePlugin extends JavaPlugin implements Listener {
 		return null;
 	}
 
+	public int getOnlinePlayerNumber() {
+		return Bukkit.getOnlinePlayers().size();
+	}
+
 	//get entity by id - DONE to be compatible with the pi it should be changed to return an entity not a player...
 	public Entity getEntity(int id) {
 		for (Player p: getServer().getOnlinePlayers()) {

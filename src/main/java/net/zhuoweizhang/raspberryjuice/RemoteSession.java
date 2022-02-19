@@ -323,6 +323,16 @@ public class RemoteSession {
 				plugin.getLogger().info("Attaching to Player [" + args[0] + "]...");
 				Player p = plugin.getNamedPlayer(args[0]);
 				if (p != null) {
+					for (RemoteSession session : plugin.sessions) {
+						if (session.attachedPlayer != null && 
+						    args[0].equals(session.attachedPlayer.getPlayerListName())
+							) {
+							plugin.getLogger().warning("Refused to attach because Player [" + args[0] + "] has been attached.");
+							send("Fail");
+							return;	
+						}
+					}
+					
 					attachedPlayer = p;
 					plugin.getLogger().info("Player [" + args[0] + "] attached.");
 					send(p.getPlayerListName());
